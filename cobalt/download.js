@@ -131,11 +131,11 @@ function whenDownloadFinished(downloadId) {
 }
 
 /**
- * @param {{tweetId: string, index?: number, tweetUrl?: string}} request
+ * @param {{tweetId: string, index?: number, tweetUrl?: string, photos?: boolean}} request
  * @param {(update: {stage: string, progress?: number, index?: number, total?: number}) => void} [onProgress]
  * @returns {Promise<{downloaded?: number, error?: string, detail?: string}>}
  */
-export async function downloadTweetMedia({tweetId, index, tweetUrl}, onProgress) {
+export async function downloadTweetMedia({tweetId, index, tweetUrl, photos}, onProgress) {
   let config = await getConfig()
 
   onProgress?.({stage: 'fetching'})
@@ -164,6 +164,7 @@ export async function downloadTweetMedia({tweetId, index, tweetUrl}, onProgress)
       screenName,
       includeAuthor: config.cobaltIncludeAuthor,
       convertGifs: config.cobaltConvertGifs,
+      photos: Boolean(photos),
     }
     items = toDownloadItems({...options, index})
     // The media viewer index can point at a photo in a mixed tweet, in which
@@ -173,7 +174,7 @@ export async function downloadTweetMedia({tweetId, index, tweetUrl}, onProgress)
     }
   }
 
-  if (items.length == 0) return {error: 'noVideo'}
+  if (items.length == 0) return {error: photos ? 'noMedia' : 'noVideo'}
 
   let downloaded = 0
   let lastError

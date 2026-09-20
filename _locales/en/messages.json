@@ -51,6 +51,12 @@
   "cobaltInstanceLabel": {
     "message": "Use your own cobalt instance"
   },
+  "cobaltShareMenuItemInfo": {
+    "message": "This one can download images as well as videos and GIFs"
+  },
+  "cobaltShareMenuItemLabel": {
+    "message": "Add a download item to the share menu"
+  },
   "customCssLabel": {
     "message": "Custom CSS"
   },
@@ -277,6 +283,9 @@
   },
   "hideSeeNewTweetsLabel": {
     "message": "Hide \"See new Tweets\""
+  },
+  "hideSharePostViaLabel": {
+    "message": "Hide “Share post via…” in the share menu"
   },
   "hideShareTweetButtonLabel": {
     "message": "Share button under tweets"

@@ -52,6 +52,7 @@ export type Config = {
   hideReplyMetrics: boolean
   hideRetweetMetrics: boolean
   hideSeeNewTweets: boolean
+  hideSharePostVia: boolean
   hideShareTweetButton: boolean
   hideSortRepliesMenu: boolean
   hideSpacesNav: boolean
@@ -98,6 +99,7 @@ export type Config = {
   uninvertFollowButtons: boolean
   // Media downloads (cobalt)
   cobaltDownloadButton: boolean
+  cobaltShareMenuItem: boolean
   cobaltConvertGifs: boolean
   cobaltIncludeAuthor: boolean
   cobaltAskWhereToSave: boolean

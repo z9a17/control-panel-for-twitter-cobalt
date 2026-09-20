@@ -16,8 +16,12 @@ downloading. Everything else works exactly like the upstream extension.
 - **GIFs** - which Twitter actually stores as silent mp4s - are converted to
   real `.gif` files in the browser, like cobalt's `convertGif` option does with
   ffmpeg. You can turn this off to save the original mp4.
-- The button appears in the action bar under tweets with a video or GIF, and in
-  the media viewer.
+- The button appears at the end of the action bar under tweets with a video or
+  GIF, and in the media viewer.
+- **Images** can be downloaded too, from the **Download image** item this adds
+  to the share menu - which also downloads videos and GIFs, and every image in
+  a tweet when you open it from the timeline.
+- The share menu's **"Share post via…"** item can be hidden.
 - No cobalt server is involved: the extraction and conversion both run inside
   the extension. If you [run your own cobalt
   instance](https://github.com/imputnet/cobalt/blob/main/docs/run-an-instance.md),
