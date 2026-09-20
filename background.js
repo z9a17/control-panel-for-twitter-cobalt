@@ -1,3 +1,5 @@
+import {downloadTweetMedia} from './cobalt/download.js'
+
 const isSafari = location.protocol.startsWith('safari-web-extension:')
 
 const enabledIcons = {
@@ -42,4 +44,25 @@ chrome.storage.local.onChanged.addListener((changes) => {
   if (changes.enabled) {
     updateToolbarIcon(changes.enabled.newValue)
   }
+})
+
+// Handle download requests from the cobalt download button
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message?.type != 'cpftCobaltDownload') return
+
+  let tabId = sender.tab?.id
+
+  downloadTweetMedia(message, (update) => {
+    if (tabId == null) return
+    chrome.tabs.sendMessage(tabId, {
+      type: 'cpftCobaltProgress',
+      requestId: message.requestId,
+      update,
+    }).catch(() => {})
+  }).then(
+    sendResponse,
+    (e) => sendResponse({error: 'downloadFailed', detail: e.message})
+  )
+
+  return true
 })

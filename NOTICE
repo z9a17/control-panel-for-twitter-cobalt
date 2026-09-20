@@ -1,3 +1,12 @@
+cobalt/engine.js is a port of the Twitter service from cobalt
+https://github.com/imputnet/cobalt - Copyright (c) imputnet - which is licensed
+under the GNU Affero General Public License v3. The full license text is in
+cobalt/COBALT-LICENSE, and this fork as a whole is distributed under the AGPL v3
+as a result. Control Panel for Twitter itself remains MIT licensed - see LICENSE.
+
+cobalt/vendor/gifenc.js is gifenc https://github.com/mattdesl/gifenc - MIT
+licensed, see cobalt/vendor/gifenc.LICENSE.md
+
 script.js includes the dedent() function from https://github.com/victornpb/tiny-dedent
 
 MIT License

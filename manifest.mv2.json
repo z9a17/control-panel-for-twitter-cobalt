@@ -35,7 +35,8 @@
     }
   ],
   "web_accessible_resources": [
-    "script.js"
+    "script.js",
+    "cobalt/button.js"
   ],
   "options_ui": {
     "browser_style": true,
@@ -47,7 +48,16 @@
     "default_popup": "browser_action.html"
   },
   "permissions": [
-    "storage"
+    "storage",
+    "downloads",
+    "cookies",
+    "https://x.com/*",
+    "https://twitter.com/*",
+    "https://api.x.com/*",
+    "https://api.twitter.com/*",
+    "https://cdn.syndication.twimg.com/*",
+    "https://video.twimg.com/*",
+    "https://pbs.twimg.com/*"
   ],
   "browser_specific_settings": {
     "gecko": {

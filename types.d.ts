@@ -96,6 +96,13 @@ export type Config = {
   twitterBlueChecks: 'ignore' | 'replace' | 'hide'
   unblurSensitiveContent: boolean
   uninvertFollowButtons: boolean
+  // Media downloads (cobalt)
+  cobaltDownloadButton: boolean
+  cobaltConvertGifs: boolean
+  cobaltIncludeAuthor: boolean
+  cobaltAskWhereToSave: boolean
+  cobaltApiInstance: string
+  cobaltApiKey: string
   // Experiments
   customCss: string
   // Desktop only
@@ -120,6 +127,18 @@ export type Config = {
   hideLiveBroadcastBar: boolean
   hideMessagesBottomNavItem: boolean
   preventNextVideoAutoplay: boolean
+}
+
+/** A file the cobalt engine found in a tweet, ready to be downloaded. */
+export type CobaltMediaItem = {
+  type: 'video' | 'gif' | 'photo'
+  url: string
+  filename: string
+  /** `true` if this is a Twitter GIF which should be converted to a GIF file. */
+  convertToGif?: boolean
+  /** `true` for videos with the broken container cobalt remuxes server-side. */
+  needsRemuxing?: boolean
+  durationMs?: number
 }
 
 export type Locale = {
