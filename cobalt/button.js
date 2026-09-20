@@ -109,6 +109,17 @@ function getTweetId($tweet) {
   return id ?? getTweetIdFromPath(location.pathname)
 }
 
+/**
+ * role="group" is used for other things - the media viewer's carousel wraps
+ * the tweet it's showing, so it contains action buttons too - so only take
+ * groups whose own children are the tweet's action buttons.
+ * @param {Element} $group
+ */
+function isActionBar($group) {
+  let $button = $group.querySelector(ACTION_BAR_BUTTON_SELECTOR)
+  return Boolean($button) && $button.closest('[role="group"]') == $group
+}
+
 /** @param {Element} $el */
 function hasVideo($el) {
   return Boolean($el?.querySelector(
@@ -428,10 +439,20 @@ function closeMenu($menuItem) {
   document.dispatchEvent(new KeyboardEvent('keydown', {key: 'Escape', bubbles: true}))
 }
 
-/** @param {{kind: string, index?: number, photoCount: number}} context */
-function getMenuItemLabel({kind, index, photoCount}) {
-  if (kind == 'photo' && index == null && photoCount > 1) return MENU_ITEM_LABELS.photos
-  return MENU_ITEM_LABELS[kind]
+/**
+ * @param {{kind: string, index?: number, photoCount: number}} context
+ * @param {NodeListOf<HTMLElement>} $items
+ */
+function getMenuItemLabel({kind, index, photoCount}, $items) {
+  let label = kind == 'photo' && index == null && photoCount > 1
+    ? MENU_ITEM_LABELS.photos
+    : MENU_ITEM_LABELS[kind]
+  if (!label) return label
+  // Twitter has its own download item for some videos - tell them apart
+  for (let $item of $items) {
+    if ($item.textContent.trim() == label) return `${label} (cobalt)`
+  }
+  return label
 }
 
 /**
@@ -485,7 +506,7 @@ async function downloadFromMenu(context) {
  * @param {{tweetId: string, index?: number, kind: string, photoCount: number}} context
  */
 function addDownloadMenuItem($items, context) {
-  let label = getMenuItemLabel(context)
+  let label = getMenuItemLabel(context, $items)
   if (!context.tweetId || !label) return
 
   let $template = /** @type {HTMLElement} */ (
@@ -533,7 +554,7 @@ document.addEventListener('click', (e) => {
 
   let $el = e.target instanceof Element ? e.target : null
   let $actionBar = /** @type {HTMLElement} */ ($el?.closest('[role="group"]'))
-  if (!$actionBar || !$actionBar.querySelector(ACTION_BAR_BUTTON_SELECTOR)) return
+  if (!$actionBar || !isActionBar($actionBar)) return
 
   let $clicked = getChildOf($actionBar, $el)
   if (!$clicked || $clicked.classList.contains(BUTTON_CLASS)) return
@@ -582,12 +603,17 @@ function processPage() {
 
   if (config.cobaltDownloadButton) {
     for (let $actionBar of /** @type {NodeListOf<HTMLElement>} */ (document.querySelectorAll('[role="group"]'))) {
-      // role="group" is used in other places, e.g. around the tweet box, so only
-      // take action bars which have tweet actions in them
-      if (!$actionBar.querySelector(ACTION_BAR_BUTTON_SELECTOR)) continue
+      if (!isActionBar($actionBar)) {
+        // Tidy up after anything which stopped being an action bar
+        $actionBar.querySelector(`:scope > .${BUTTON_CLASS}`)?.remove()
+        continue
+      }
 
       let {tweetId, index, kind} = getMediaDetails($actionBar)
-      if (!tweetId || (kind != 'video' && kind != 'gif')) continue
+      if (!tweetId || (kind != 'video' && kind != 'gif')) {
+        $actionBar.querySelector(`:scope > .${BUTTON_CLASS}`)?.remove()
+        continue
+      }
 
       addButton($actionBar, {tweetId, index})
     }
@@ -646,7 +672,11 @@ function addStyle() {
   $style.textContent = `
 .${BUTTON_CLASS} {
   cursor: pointer;
-  /* Sit at the end of the action bar, which has spare space in the media viewer */
+  /* Twitter's action buttons grow to fill the bar and draw their icon at the
+     start of the space they take up - this one just takes the width it needs,
+     at the end of the bar */
+  flex: 0 0 auto !important;
+  justify-content: flex-end !important;
   margin-inline-start: auto !important;
 }
 .${BUTTON_CLASS} svg {
