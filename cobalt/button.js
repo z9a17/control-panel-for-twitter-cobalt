@@ -331,17 +331,21 @@ function processPage() {
   }
 }
 
+/**
+ * Timelines mutate constantly while scrolling, so batch the work up instead of
+ * looking for action bars on every mutation.
+ */
 function scheduleProcessPage() {
   if (observerScheduled) return
   observerScheduled = true
-  requestAnimationFrame(() => {
+  setTimeout(() => {
     observerScheduled = false
     try {
       processPage()
     } catch (e) {
       log('error adding download buttons', e)
     }
-  })
+  }, 150)
 }
 
 function startObserving() {
