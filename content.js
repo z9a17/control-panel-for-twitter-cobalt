@@ -54,6 +54,14 @@ chrome.storage.local.get((/** @type {Partial<import("./types").Config>} */ store
   }
   document.documentElement.appendChild($main)
 
+  // Adds the cobalt-powered download button to videos and GIFs
+  let $cobalt = document.createElement('script')
+  $cobalt.src = chrome.runtime.getURL('cobalt/button.js')
+  $cobalt.onload = function() {
+    this.remove()
+  }
+  document.documentElement.appendChild($cobalt)
+
   chrome.storage.onChanged.addListener(onConfigChange)
 })
 
@@ -76,4 +84,27 @@ window.addEventListener('message', (event) => {
       chrome.storage.onChanged.addListener(onConfigChange)
     })
   }
+  // Download requests from the download button, which the background script
+  // handles as the page can't use the extension APIs itself
+  else if (event.data.type === 'cpftCobaltDownload' && event.data.requestId) {
+    let {type, ...request} = event.data
+    chrome.runtime.sendMessage({type: 'cpftCobaltDownload', ...request}, (result) => {
+      window.postMessage({
+        type: 'cpftCobaltResult',
+        requestId: request.requestId,
+        result: result ?? {error: chrome.runtime.lastError?.message ?? 'downloadFailed'},
+      }, location.origin)
+    })
+  }
 }, false)
+
+// Pass download progress from the background script on to the page
+chrome.runtime.onMessage.addListener((message) => {
+  if (message?.type === 'cpftCobaltProgress') {
+    window.postMessage({
+      type: 'cpftCobaltProgress',
+      requestId: message.requestId,
+      update: message.update,
+    }, location.origin)
+  }
+})

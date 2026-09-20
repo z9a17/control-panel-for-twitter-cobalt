@@ -21,6 +21,36 @@
   "bypassAgeVerificationLabel": {
     "message": "Bypass age verification"
   },
+  "cobaltApiInstanceLabel": {
+    "message": "Instance API URL"
+  },
+  "cobaltApiKeyLabel": {
+    "message": "API key (if your instance needs one)"
+  },
+  "cobaltAskWhereToSaveLabel": {
+    "message": "Ask where to save each file"
+  },
+  "cobaltConvertGifsInfo": {
+    "message": "Twitter stores GIFs as videos - converting them takes a moment, turn this off to save the original .mp4"
+  },
+  "cobaltConvertGifsLabel": {
+    "message": "Save GIFs as .gif files"
+  },
+  "cobaltDownloadButtonInfo": {
+    "message": "Downloads are handled by the bundled cobalt engine"
+  },
+  "cobaltDownloadButtonLabel": {
+    "message": "Add a download button to videos and GIFs"
+  },
+  "cobaltIncludeAuthorLabel": {
+    "message": "Include the author's @username in filenames"
+  },
+  "cobaltInstanceInfo": {
+    "message": "Leave the URL blank to use the bundled cobalt engine, which downloads media without any server"
+  },
+  "cobaltInstanceLabel": {
+    "message": "Use your own cobalt instance"
+  },
   "customCssLabel": {
     "message": "Custom CSS"
   },
@@ -310,6 +340,9 @@
   },
   "listRetweetsLabel": {
     "message": "Retweets in Lists"
+  },
+  "mediaDownloadsOptionsLabel": {
+    "message": "Media downloads"
   },
   "mutableQuoteTweetsLabel": {
     "message": "Enable muting of Quote Tweets"

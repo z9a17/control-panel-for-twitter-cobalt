@@ -40,7 +40,8 @@
         "https://mobile.x.com/*"
       ],
       "resources": [
-        "script.js"
+        "script.js",
+        "cobalt/button.js"
       ]
     }
   ],
@@ -52,6 +53,18 @@
     "default_popup": "browser_action.html"
   },
   "permissions": [
-    "storage"
+    "storage",
+    "downloads",
+    "cookies",
+    "offscreen"
+  ],
+  "host_permissions": [
+    "https://x.com/*",
+    "https://twitter.com/*",
+    "https://api.x.com/*",
+    "https://api.twitter.com/*",
+    "https://cdn.syndication.twimg.com/*",
+    "https://video.twimg.com/*",
+    "https://pbs.twimg.com/*"
   ]
 }

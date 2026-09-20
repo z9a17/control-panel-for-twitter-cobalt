@@ -874,6 +874,58 @@
       </section>
     </section>
 
+    <section class="group labelled">
+      <label id="mediaDownloadsOptionsLabel">Media downloads</label>
+      <section class="checkbox">
+        <label>
+          <span id="cobaltDownloadButtonLabel">Add a download button to videos and GIFs</span>
+          <input type="checkbox" name="cobaltDownloadButton">
+          <span class="toggle"></span>
+        </label>
+        <p id="cobaltDownloadButtonInfo">
+          Downloads are handled by the bundled cobalt engine
+        </p>
+        <section class="checkbox">
+          <label>
+            <span id="cobaltConvertGifsLabel">Save GIFs as .gif files</span>
+            <input type="checkbox" name="cobaltConvertGifs">
+            <span class="toggle"></span>
+          </label>
+          <p id="cobaltConvertGifsInfo">
+            Twitter stores GIFs as videos - converting them takes a moment, turn this off to save the original .mp4
+          </p>
+        </section>
+        <section class="checkbox">
+          <label>
+            <span id="cobaltIncludeAuthorLabel">Include the author's @username in filenames</span>
+            <input type="checkbox" name="cobaltIncludeAuthor">
+            <span class="toggle"></span>
+          </label>
+        </section>
+        <section class="checkbox">
+          <label>
+            <span id="cobaltAskWhereToSaveLabel">Ask where to save each file</span>
+            <input type="checkbox" name="cobaltAskWhereToSave">
+            <span class="toggle"></span>
+          </label>
+        </section>
+      </section>
+      <section>
+        <details id="cobaltInstanceDetails">
+          <summary id="cobaltInstanceLabel">Use your own cobalt instance</summary>
+          <section class="text">
+            <label id="cobaltApiInstanceLabel" for="cobaltApiInstance">Instance API URL</label>
+            <input type="text" id="cobaltApiInstance" name="cobaltApiInstance" placeholder="https://cobalt.example.com/" spellcheck="false">
+            <label id="cobaltApiKeyLabel" for="cobaltApiKey">API key (if your instance needs one)</label>
+            <input type="text" id="cobaltApiKey" name="cobaltApiKey" spellcheck="false">
+            <p id="cobaltInstanceInfo">
+              Leave the URL blank to use the bundled cobalt engine, which downloads media without any server
+            </p>
+          </section>
+        </details>
+      </section>
+    </section>
+
     <section>
       <details id="experiments">
         <summary id="experimentsOptionsLabel">
