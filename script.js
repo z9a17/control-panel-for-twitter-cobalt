@@ -4137,6 +4137,28 @@ function patchHistory() {
   props.history.push.patched = true
   log('history patched')
 }
+
+function interceptMediaButton() {
+  document.addEventListener('click', (e) => {
+    if (!config.enabled || !config.hideGrokNav) return
+    if (!(e.target instanceof Element)) return
+
+    let $button = e.target.closest('button')
+    if (!$button) return
+
+    let $fileInput = $button.previousElementSibling
+    if (!($fileInput instanceof HTMLInputElement) ||
+        $fileInput.dataset.testid != 'fileInput' ||
+        $fileInput.type != 'file') {
+      return
+    }
+
+    log('hideGrok: opening media file picker')
+    e.preventDefault()
+    e.stopImmediatePropagation()
+    $fileInput.click()
+  }, true)
+}
 //#endregion
 
 //#region CSS
@@ -8010,9 +8032,10 @@ function tweakTweetEngagementPage() {
 //#endregion
 
 //#region Main
-async function main() {
+async function main({processImmediately = false} = {}) {
   // Don't run on non-app URLs served from x.com
-  if (location.pathname.startsWith('/i/oauth2/authorize') ||
+  if (location.pathname.startsWith('/account/access') ||
+      location.pathname.startsWith('/i/oauth2/authorize') ||
       location.pathname.startsWith('/oauth/authorize') ||
       /^\/([^/]+\/)?(tos|privacy)(\/previous(\/version_\d+)?)?/.test(location.pathname)) {
     log('Not running on', location.pathname)
@@ -8066,6 +8089,7 @@ async function main() {
       observeBodyBackgroundColor()
       observeReRenderBoundary()
       patchHistory()
+      interceptMediaButton()
       let initialThemeColor = getThemeColorFromState()
       if (initialThemeColor) {
         themeColor = initialThemeColor
@@ -8089,6 +8113,11 @@ async function main() {
 
       // Start taking action on page changes
       observingPageChanges = true
+
+      if (processImmediately) {
+        processImmediately = false
+        onTitleChange(document.title)
+      }
 
       // Remove the loading stylesheet if the content script added one
       let $loadingStylesheet = document.querySelector('style#cpftLoading')
@@ -8124,8 +8153,7 @@ function configChanged(changes) {
     log(`${changes.enabled ? 'en' : 'dis'}abling extension functionality`)
     if (changes.enabled) {
       // Process the current page if we've just been enabled on it
-      observingPageChanges = true
-      main()
+      main({processImmediately: true})
     } else {
       // These functions have teardowns when disabled
       configureCss()
