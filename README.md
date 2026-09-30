@@ -7,7 +7,7 @@
 ## About this fork
 
 This is a fork of [insin/control-panel-for-twitter](https://github.com/insin/control-panel-for-twitter)
-which **adds a download button to videos and GIFs**, using a bundled port of
+which **adds media downloads to the share dropdown**, using a bundled port of
 [cobalt](https://github.com/imputnet/cobalt)'s Twitter service for the
 downloading. Everything else works exactly like the upstream extension.
 
@@ -16,9 +16,7 @@ downloading. Everything else works exactly like the upstream extension.
 - **GIFs** - which Twitter actually stores as silent mp4s - are converted to
   real `.gif` files in the browser, like cobalt's `convertGif` option does with
   ffmpeg. You can turn this off to save the original mp4.
-- The button appears at the end of the action bar under tweets with a video or
-  GIF, and in the media viewer.
-- **Images** can be downloaded too, from the **Download image** item this adds
+- **Images** can be downloaded too, from the media download item this adds
   to the share menu - which also downloads videos and GIFs, and every image in
   a tweet when you open it from the timeline.
 - The share menu's **"Share post via…"** item can be hidden.

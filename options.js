@@ -45,8 +45,6 @@ for (let translationId of [
   'cobaltAskWhereToSaveLabel',
   'cobaltConvertGifsInfo',
   'cobaltConvertGifsLabel',
-  'cobaltDownloadButtonInfo',
-  'cobaltDownloadButtonLabel',
   'cobaltIncludeAuthorLabel',
   'cobaltInstanceInfo',
   'cobaltInstanceLabel',
@@ -224,7 +222,6 @@ const defaultConfig = {
   // Default based on the platform if the main script hasn't run on Twitter yet
   version: /(Android|iP(ad|hone))/.test(navigator.userAgent) ? 'mobile' : 'desktop',
   // Media downloads (cobalt)
-  cobaltDownloadButton: true,
   cobaltShareMenuItem: true,
   cobaltConvertGifs: true,
   cobaltIncludeAuthor: true,
@@ -378,7 +375,7 @@ let $showBlueReplyFollowersCountLabel = /** @type {HTMLElement} */ (document.que
 //#region Utility functions
 function exportConfig() {
   let $a = document.createElement('a')
-  $a.download = 'control-panel-for-twitter-v4.25.2.config.txt'
+  $a.download = 'control-panel-for-twitter-v4.25.3.config.txt'
   $a.href = URL.createObjectURL(new Blob([
     JSON.stringify(optionsConfig, null, 2)
   ], {type: 'text/plain'}))

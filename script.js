@@ -4532,6 +4532,9 @@ const configureCss = (() => {
     if (config.hideAdsNav) {
       hideCssSelectors.push(`${menuRole} a:is([href*="ads.twitter.com"], [href*="ads.x.com"])`)
     }
+    if (config.disableNflFeatures) {
+      hideCssSelectors.push('nav.TimelineTabs .cpft-nfl-tab')
+    }
     if (config.hideJobsNav) {
       hideCssSelectors.push(
         // Jobs navigation item
@@ -5217,35 +5220,28 @@ const configureCss = (() => {
 })()
 
 const configureFeatureFlags = (() => {
-  let isTrue
+  const originals = new Map()
   return function configureFeatureFlags() {
-    let props = getTopLevelProps()
-    if (!props) return
-    let featureSwitches = props?.contextProviderProps?.featureSwitches
-    if (!featureSwitches) {
+    if (!config.enabled) {
+      for (let [switches, original] of originals) switches.isTrue = original
+      originals.clear()
+      return
+    }
+    let featureSwitches = getTopLevelProps()?.contextProviderProps?.featureSwitches
+    if (!featureSwitches || typeof featureSwitches.isTrue != 'function') {
       warn('featureSwitches not found')
       return
     }
-
-    if (!config.enabled) {
-      if (isTrue) {
-        log('restoring original featureSwitches')
-        featureSwitches.isTrue = isTrue
-        isTrue = null
-      }
-      return
-    }
-
-    if (isTrue) return
-
-    isTrue = featureSwitches.isTrue
-    featureSwitches.isTrue = (flag) => {
+    if (originals.has(featureSwitches)) return
+    let original = featureSwitches.isTrue
+    originals.set(featureSwitches, original)
+    featureSwitches.isTrue = function(flag, ...args) {
       if (config.bypassAgeVerification && flag == 'rweb_age_assurance_flow_enabled') return false
       if (config.disableNflFeatures && flag == 'responsive_web_nfl_enabled') return false
       if (config.revertMediaCarousel && flag == 'rweb_media_carousel_enabled') return false
       if (config.revertProfileTabs && flag == 'responsive_web_profile_redesign_enabled') return false
       if (config.revertTwemoji && flag == 'responsive_web_native_emojis_enabled') return false
-      return isTrue(flag)
+      return original.call(this, flag, ...args)
     }
     log('featureSwitches patched')
   }
@@ -6617,6 +6613,7 @@ function onIndividualTweetTimelineChange($timeline, options) {
  */
 function onTitleChange(title) {
   log('title changed', {title, path: location.pathname})
+  configureFeatureFlags()
 
   if (checkforDisabledHomeTimeline()) return
 
@@ -7529,6 +7526,13 @@ function tweakHomeTimelinePage() {
   }
 
   tweakTimelineTabs($timelineTabs)
+  observeElement($timelineTabs.parentElement, () => {
+    let $tabs = document.querySelector('nav.TimelineTabs')
+    if ($tabs) tagNflTimelineTabs($tabs)
+  }, {
+    name: 'NFL timeline tabs',
+    observers: pageObservers,
+  }, {childList: true, subtree: true})
   if (mobile && isSafari && config.replaceLogo) {
     processTwitterLogos(document.querySelector(Selectors.MOBILE_TIMELINE_HEADER))
   }
@@ -7725,8 +7729,16 @@ async function tweakMobileMediaViewerPage() {
   }, {childList: true, subtree: true})
 }
 
+function tagNflTimelineTabs($timelineTabs) {
+  for (let $tab of $timelineTabs.querySelectorAll('[role="tab"]')) {
+    let isNfl = $tab.textContent.trim() == 'NFL' && !$tab.getAttribute('href')?.includes('/lists/')
+    $tab.parentElement.classList.toggle('cpft-nfl-tab', isNfl)
+  }
+}
+
 async function tweakTimelineTabs($timelineTabs) {
   $timelineTabs.classList.add('TimelineTabs')
+  tagNflTimelineTabs($timelineTabs)
   let $followingTabLink = /** @type {HTMLElement} */ ($timelineTabs.querySelector('div[role="tablist"] > div:nth-child(2) > [role="tab"]'))
   if (!$followingTabLink) {
     warn('could not find Following tab link')
@@ -8179,6 +8191,7 @@ function configChanged(changes) {
   }
 
   // Apply configuration changes
+  configureFeatureFlags()
   configureCss()
   configureFont()
   configureDynamicCss()

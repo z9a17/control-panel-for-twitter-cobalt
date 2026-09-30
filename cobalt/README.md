@@ -1,8 +1,7 @@
 # cobalt media downloading
 
 This folder is the media downloading feature which this fork adds: a download
-button on tweets with a video or GIF in them, and a download item in the share
-menu which handles images too, both powered by a bundled port of
+item in the share menu for videos, GIFs and images, powered by a bundled port of
 [cobalt](https://github.com/imputnet/cobalt)'s Twitter service.
 
 Nothing here talks to `api.cobalt.tools` or any other public instance - hosted
@@ -16,7 +15,7 @@ it in the options.
 
 | File | Runs in | What it does |
 |:--|:--|:--|
-| `button.js` | the Twitter page | Adds the download button to action bars and the media viewer, and the download item to the share menu |
+| `button.js` | the Twitter page | Adds the media download item to the share menu |
 | `download.js` | the background script | Works out what to download, converts GIFs, saves files |
 | `engine.js` | the background script | cobalt's Twitter extraction: finds the media in a tweet and picks the best quality |
 | `instance.js` | the background script | Client for your own cobalt instance, if you configure one |
@@ -28,8 +27,7 @@ it in the options.
 
 1. `button.js` posts a message with the tweet id (and the media index, in the
    media viewer) to `content.js`, which forwards it to the background script.
-   Downloads started from the share menu also ask for images, which the
-   download button ignores.
+   Downloads include images, videos and GIFs.
 2. `engine.js` asks Twitter's GraphQL API for the tweet as a guest, retries as
    the logged-in user if that's refused, and falls back to the tweet embed API -
    the same order cobalt uses. It returns the highest bitrate mp4 for each video

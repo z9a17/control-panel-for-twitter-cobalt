@@ -99,7 +99,6 @@ export type Config = {
   unblurSensitiveContent: boolean
   uninvertFollowButtons: boolean
   // Media downloads (cobalt)
-  cobaltDownloadButton: boolean
   cobaltShareMenuItem: boolean
   cobaltConvertGifs: boolean
   cobaltIncludeAuthor: boolean
