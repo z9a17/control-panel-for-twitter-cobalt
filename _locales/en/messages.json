@@ -144,10 +144,10 @@
     "message": "Hide the sidebar and let timeline content go full-width"
   },
   "centerHomeTimelineInfo": {
-    "message": "Keep Home centered with search on the right when sidebar content is hidden. Full-width mode takes priority."
+    "message": "Keep Home and individual posts centered with search on the right when sidebar content is hidden. Full-width mode takes priority."
   },
   "centerHomeTimelineLabel": {
-    "message": "Center the Home timeline"
+    "message": "Center Home and post pages"
   },
   "fullWidthContentLabel": {
     "message": "Full-width timeline content"
