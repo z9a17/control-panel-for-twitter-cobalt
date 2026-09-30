@@ -16,14 +16,24 @@ async function main() {
   const browser = await chromium.launch({headless: true, args: ['--disable-gpu']})
   try {
     const page = await browser.newPage()
-    for (const route of ['HomeTimeline', 'Tweet']) {
-      for (const width of [2560, 1920, 1600, 1440, 1280, 1203, 1143, 1024, 1000, 999, 800, 700, 600]) {
+    for (const route of ['Profile', 'Notifications', 'HomeTimeline', 'Tweet']) {
+      for (const width of [2560, 1920, 1600, 1440, 1280, 1264, 1203, 1143, 1024, 1000, 999, 800, 700, 600]) {
+        if (route === 'Profile' && width > 1264) continue
         await page.setViewportSize({width, height: 800})
         await page.setContent(fixture.replace('__CENTERED_HOME_CSS__', css))
         await page.evaluate(route => {
           document.body.className = `Desktop ${route} Sidebar`
           if (route === 'Tweet') {
             document.querySelector('.tabs').innerHTML = '<button aria-label="Back">←</button><strong>Tweet</strong>'
+          } else if (route === 'Profile') {
+            document.querySelector('.tabs').innerHTML = '<button aria-label="Back">←</button><strong>Example profile</strong>'
+            const profile = document.querySelector('article')
+            profile.style.padding = '0'
+            profile.innerHTML = '<div class="profile-banner" style="width:100%;aspect-ratio:3/1;background:#8598aa"></div><div style="padding:16px"><div style="display:flex;justify-content:space-between;align-items:center"><div class="avatar" style="width:112px;height:112px"></div><button aria-label="Following">Following</button></div><h2>Example profile</h2><p>@example</p><p>Profile description with links and follower counts.</p></div>'
+          } else if (route === 'Notifications') {
+            const header = document.querySelector('.tabs')
+            header.style.cssText = 'height:106px;display:block'
+            header.innerHTML = '<div style="height:50px;padding:16px"><strong>Notifications</strong></div><nav aria-label="Notifications" style="height:56px;display:flex;justify-content:space-around;align-items:center"><button role="tab" aria-selected="true">All</button><button role="tab" aria-selected="false">Mentions</button></nav>'
           }
         }, route)
         await page.evaluate(() => window.scrollTo(0, 0))
@@ -48,6 +58,12 @@ async function main() {
         assert.equal(composeIcon.width, '24px')
         assert.ok(composeIcon.mask.startsWith('url("data:image/svg+xml,'), 'Compose icon must have an SVG mask')
         assert.equal(metrics.overflow, false, `No horizontal overflow at ${width}px`)
+        if (route === 'Profile') {
+          const banner = await page.locator('.profile-banner').boundingBox()
+          assert.ok(banner.width <= metrics.feed.width, 'Profile banner must fit the centered column')
+          const following = await page.getByRole('button', {name: 'Following', exact: true}).boundingBox()
+          assert.ok(following && following.x >= metrics.feed.x && following.x + following.width <= metrics.feed.x + metrics.feed.width, 'Profile actions must remain visible inside the column')
+        }
         if (width >= 1000) {
           await page.getByRole('textbox', {name: 'Search query'}).fill('test query')
           assert.equal(await page.getByRole('textbox', {name: 'Search query'}).inputValue(), 'test query')
@@ -70,12 +86,12 @@ async function main() {
     await page.setViewportSize({width: 1143, height: 800})
     await page.setContent(fixture.replace('__CENTERED_HOME_CSS__', css))
     const homeMetrics = await page.evaluate(() => layoutMetrics())
-    await page.evaluate(() => { document.body.className = 'Desktop Tweet Sidebar' })
-    assert.deepEqual(await page.evaluate(() => layoutMetrics()), homeMetrics, 'Opening a post must not move the columns')
-    await page.evaluate(() => { document.body.className = 'Desktop HomeTimeline Sidebar' })
-    assert.deepEqual(await page.evaluate(() => layoutMetrics()), homeMetrics, 'Returning Home must not move the columns')
+    for (const route of ['Tweet', 'Notifications', 'Profile', 'HomeTimeline']) {
+      await page.evaluate(route => { document.body.className = `Desktop ${route} Sidebar` }, route)
+      assert.deepEqual(await page.evaluate(() => layoutMetrics()), homeMetrics, `Navigating to ${route} must not move the columns`)
+    }
     // CSS must leave mobile and unrelated desktop layouts alone.
-    for (const classes of ['Mobile HomeTimeline Sidebar', 'Mobile Tweet Sidebar', 'Desktop Profile Sidebar', 'Desktop Search Sidebar']) {
+    for (const classes of ['Mobile HomeTimeline Sidebar', 'Mobile Tweet Sidebar', 'Mobile Notifications Sidebar', 'Mobile Profile Sidebar', 'Desktop Search Sidebar']) {
       await page.setViewportSize({width: 1203, height: 800})
       await page.setContent(fixture.replace('__CENTERED_HOME_CSS__', ''))
       await page.evaluate(value => { document.body.className = value }, classes)
@@ -83,6 +99,15 @@ async function main() {
       await page.addStyleTag({content: css})
       const after = await page.evaluate(() => layoutMetrics())
       assert.deepEqual(after, before, `Other layouts must remain unchanged: ${classes}`)
+    }
+    // Keep the existing profile layout on larger displays.
+    for (const width of [1265, 1280, 1440, 1600, 1920, 2560]) {
+      await page.setViewportSize({width, height: 800})
+      await page.setContent(fixture.replace('__CENTERED_HOME_CSS__', ''))
+      await page.evaluate(() => { document.body.className = 'Desktop Profile Sidebar' })
+      const before = await page.evaluate(() => layoutMetrics())
+      await page.addStyleTag({content: css})
+      assert.deepEqual(await page.evaluate(() => layoutMetrics()), before, `Wide profile layout must remain unchanged at ${width}px`)
     }
     // Removing the option restores the old layout rather than moving React nodes.
     await page.setContent(fixture.replace('__CENTERED_HOME_CSS__', ''))

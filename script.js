@@ -4165,39 +4165,40 @@ function interceptMediaButton() {
 
 function getCenteredHomeTimelineCss() {
   let composeIcon = encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="${config.replaceLogo ? Svgs.TWITTER_FEATHER_PLUS_PATH : Svgs.PLUS_PATH}"/></svg>`)
-  return `
-    body.Desktop:is(.HomeTimeline, .Tweet) {
+  const pageSelector = 'body.Desktop:is(.HomeTimeline, .Tweet, .Notifications)'
+  const layoutCss = `
+    ${pageSelector} {
       --cpft-home-nav-width: 88px;
       --cpft-home-feed-width: min(600px, calc(100vw - var(--cpft-home-nav-width) - var(--cpft-home-nav-width)));
       --cpft-home-search-width: min(350px, calc((100vw - var(--cpft-home-feed-width)) / 2 - 24px));
     }
-    body.Desktop:is(.HomeTimeline, .Tweet) div[data-at-shortcutkeys]:has(> header[role="banner"]):has(> main) {
+    ${pageSelector} div[data-at-shortcutkeys]:has(> header[role="banner"]):has(> main) {
       display: grid !important;
       grid-template-columns: var(--cpft-home-nav-width) minmax(0, var(--cpft-home-feed-width)) var(--cpft-home-nav-width);
       justify-content: center !important;
       align-items: start !important;
       width: 100%;
     }
-    body.Desktop:is(.HomeTimeline, .Tweet) header[role="banner"] {
+    ${pageSelector} header[role="banner"] {
       grid-column: 1;
       width: var(--cpft-home-nav-width) !important;
       min-width: 0 !important;
     }
-    body.Desktop:is(.HomeTimeline, .Tweet) header[role="banner"] > div,
-    body.Desktop:is(.HomeTimeline, .Tweet) header[role="banner"] > div > div {
+    ${pageSelector} header[role="banner"] > div,
+    ${pageSelector} header[role="banner"] > div > div {
       width: var(--cpft-home-nav-width) !important;
       max-width: var(--cpft-home-nav-width) !important;
     }
-    body.Desktop:is(.HomeTimeline, .Tweet) header[role="banner"] nav :is(a, button) div[dir] {
+    ${pageSelector} header[role="banner"] nav :is(a, button) div[dir] {
       display: none !important;
     }
-    body.Desktop:is(.HomeTimeline, .Tweet) header[role="banner"] > div > div > div {
+    ${pageSelector} header[role="banner"] > div > div > div {
       width: 100% !important;
       min-width: 0 !important;
       max-width: 100% !important;
     }
     /* X renders a text-only compose button at its wider breakpoint. */
-    body.Desktop:is(.HomeTimeline, .Tweet) [data-testid="SideNav_NewTweet_Button"] {
+    ${pageSelector} [data-testid="SideNav_NewTweet_Button"] {
       width: 49px !important;
       min-width: 49px !important;
       max-width: 49px !important;
@@ -4207,33 +4208,33 @@ function getCenteredHomeTimelineCss() {
       align-items: center !important;
       justify-content: center !important;
     }
-    body.Desktop:is(.HomeTimeline, .Tweet) [data-testid="SideNav_NewTweet_Button"] > div {
+    ${pageSelector} [data-testid="SideNav_NewTweet_Button"] > div {
       display: none !important;
     }
-    body.Desktop:is(.HomeTimeline, .Tweet) [data-testid="SideNav_NewTweet_Button"]::before {
+    ${pageSelector} [data-testid="SideNav_NewTweet_Button"]::before {
       content: "";
       width: 24px;
       height: 24px;
       background-color: currentColor;
       mask: url("data:image/svg+xml,${composeIcon}") center / contain no-repeat;
     }
-    body.Desktop:is(.HomeTimeline, .Tweet) [data-testid="SideNav_AccountSwitcher_Button"] {
+    ${pageSelector} [data-testid="SideNav_AccountSwitcher_Button"] {
       width: 49px !important;
       min-width: 49px !important;
       max-width: 49px !important;
       padding: 4px !important;
       justify-content: center !important;
     }
-    body.Desktop:is(.HomeTimeline, .Tweet) [data-testid="SideNav_AccountSwitcher_Button"] > div:first-child {
+    ${pageSelector} [data-testid="SideNav_AccountSwitcher_Button"] > div:first-child {
       min-width: 0 !important;
       max-width: 40px !important;
       flex: none !important;
     }
-    body.Desktop:is(.HomeTimeline, .Tweet) [data-testid="SideNav_AccountSwitcher_Button"] > div:not(:first-child),
-    body.Desktop:is(.HomeTimeline, .Tweet) [data-testid="SideNav_AccountSwitcher_Button"] div[dir] {
+    ${pageSelector} [data-testid="SideNav_AccountSwitcher_Button"] > div:not(:first-child),
+    ${pageSelector} [data-testid="SideNav_AccountSwitcher_Button"] div[dir] {
       display: none !important;
     }
-    body.Desktop:is(.HomeTimeline, .Tweet) main {
+    ${pageSelector} main {
       grid-column: 2;
       width: 100% !important;
       min-width: 0 !important;
@@ -4241,25 +4242,25 @@ function getCenteredHomeTimelineCss() {
       flex: none !important;
       align-items: stretch !important;
     }
-    body.Desktop:is(.HomeTimeline, .Tweet) main > div,
-    body.Desktop:is(.HomeTimeline, .Tweet) main > div > div {
+    ${pageSelector} main > div,
+    ${pageSelector} main > div > div {
       width: 100% !important;
       min-width: 0 !important;
       max-width: 600px !important;
     }
-    body.Desktop:is(.HomeTimeline, .Tweet) main div:has(> [data-testid="primaryColumn"]) {
+    ${pageSelector} main div:has(> [data-testid="primaryColumn"]) {
       display: block !important;
       position: relative !important;
       width: 100% !important;
       min-width: 0 !important;
     }
-    body.Desktop:is(.HomeTimeline, .Tweet) [data-testid="primaryColumn"] {
+    ${pageSelector} [data-testid="primaryColumn"] {
       width: 100% !important;
       min-width: 0 !important;
       max-width: 600px !important;
       box-sizing: border-box;
     }
-    body.Desktop:is(.HomeTimeline, .Tweet) [data-testid="sidebarColumn"] {
+    ${pageSelector} [data-testid="sidebarColumn"] {
       /* Search occupies the right margin without affecting the feed's layout. */
       display: block !important;
       position: absolute !important;
@@ -4275,9 +4276,9 @@ function getCenteredHomeTimelineCss() {
       padding: 6px 0 0 !important;
     }
     /* Remove the height reservation and sticky positioning of the hidden sidebar. */
-    body.Desktop:is(.HomeTimeline, .Tweet) [data-testid="sidebarColumn"] div:has(.SidebarContents),
-    body.Desktop:is(.HomeTimeline, .Tweet) [data-testid="sidebarColumn"] .SidebarContents,
-    body.Desktop:is(.HomeTimeline, .Tweet) .SidebarContents > div:first-child {
+    ${pageSelector} [data-testid="sidebarColumn"] div:has(.SidebarContents),
+    ${pageSelector} [data-testid="sidebarColumn"] .SidebarContents,
+    ${pageSelector} .SidebarContents > div:first-child {
       width: 100% !important;
       min-width: 0 !important;
       height: auto !important;
@@ -4290,15 +4291,21 @@ function getCenteredHomeTimelineCss() {
       top: auto !important;
       bottom: auto !important;
     }
-    body.Desktop:is(.HomeTimeline, .Tweet) [data-testid="sidebarColumn"] > div:has(.SidebarContents) {
+    ${pageSelector} [data-testid="sidebarColumn"] > div:has(.SidebarContents) {
       position: sticky !important;
       top: 0 !important;
     }
     @media (max-width: 999px) {
-      body.Desktop:is(.HomeTimeline, .Tweet) [data-testid="sidebarColumn"] { display: none !important; }
+      ${pageSelector} [data-testid="sidebarColumn"] { display: none !important; }
     }
     @media (max-width: 760px) {
-      body.Desktop:is(.HomeTimeline, .Tweet) { --cpft-home-nav-width: 64px; }
+      ${pageSelector} { --cpft-home-nav-width: 64px; }
+    }
+  `
+  // Use X's compact-navigation breakpoint for profiles and keep the wide layout.
+  return `${layoutCss}
+    @media (max-width: 1264px) {
+      ${layoutCss.replaceAll(pageSelector, 'body.Desktop.Profile')}
     }
   `
 }
