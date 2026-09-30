@@ -1,4 +1,71 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>
-  *{box-sizing:border-box}body{margin:0;background:#000;color:#e7e9ea;font:16px Arial}button,input{font:inherit}button{background:transparent;color:inherit;border:0}#shell{display:flex;justify-content:center;min-height:100vh}header{width:150px;flex-shrink:0}header>div>div{width:150px;position:fixed;height:100vh;padding:18px}header nav a{display:block;padding:16px;font-size:22px}main{flex:1;align-items:stretch;display:flex;flex-direction:column}main>div{width:100%;max-width:1050px}#columns{display:flex;justify-content:space-between;position:relative}#primary{width:600px;flex-shrink:0;border-inline:1px solid #333}#sidebar{width:350px;margin:0 30px;padding:6px 0}#sidebar>div>div{width:350px;position:sticky;top:0}.SidebarContents>div:first-child{width:350px}.SidebarContents>div:not(:first-child){display:none}.search{height:48px;display:flex;align-items:center;border:1px solid #333;border-radius:30px;padding:12px}input{background:transparent;color:inherit;border:0;width:100%;min-width:0;outline:none}.tabs{display:flex;justify-content:space-around;position:sticky;top:0;background:#000;border-bottom:1px solid #333;height:56px;align-items:center}article{padding:20px;border-bottom:1px solid #333}article p{line-height:1.5}.media{height:280px;border-radius:16px;background:linear-gradient(135deg,#594755,#8a7985);display:grid;place-items:center;font-size:24px}.actions{display:flex;justify-content:space-between;margin-top:20px}.overlay{position:fixed;right:8px;top:8px;background:#102130;padding:8px;border-radius:8px;font:12px monospace;z-index:5}
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>
+  * { box-sizing: border-box }
+  body { margin: 0; background: #000; color: #e7e9ea; font: 16px Arial }
+  button, input { font: inherit }
+  button { background: transparent; color: inherit; border: 0 }
+  #shell { display: flex; justify-content: center; min-height: 100vh }
+  header { width: 275px; flex-shrink: 0 }
+  header > div > div { width: 275px; position: fixed; height: 100vh; padding: 12px }
+  header nav a { display: flex; align-items: center; padding: 12px; font-size: 22px }
+  header nav a div[dir] { margin-left: 16px }
+  #compose { display: flex; justify-content: center; align-items: center; background: #1d9bf0; color: #fff; min-width: 230px; width: 90%; height: 50px; border-radius: 30px; margin-block: 12px }
+  #compose svg { display: none; width: 24px; height: 24px }
+  #account { display: flex; align-items: center; min-width: 230px; width: 100%; padding: 12px; position: absolute; bottom: 12px }
+  .avatar { width: 40px; height: 40px; flex-shrink: 0; background: #546575; border-radius: 50% }
+  #account > div:nth-child(2) { margin-left: 12px }
+  @media (max-width: 1264px) {
+    header, header > div > div { width: 88px }
+    header nav a div[dir], #compose span, #account > div:not(:first-child) { display: none }
+    #compose, #account { min-width: 0; width: 56px }
+    #compose svg { display: block }
+  }
+  main { flex: 1; align-items: stretch; display: flex; flex-direction: column }
+  main > div { width: 100%; max-width: 1050px }
+  #columns { display: flex; justify-content: space-between; position: relative }
+  #primary { width: 600px; flex-shrink: 0; border-inline: 1px solid #333 }
+  #sidebar { width: 350px; margin: 0 30px; padding: 6px 0 }
+  #sidebar > div > div { width: 350px; position: sticky; top: 0 }
+  .SidebarContents > div:first-child { width: 350px }
+  .SidebarContents > div:not(:first-child) { display: none }
+  .search { height: 42px; display: flex; align-items: center; border: 1px solid #333; border-radius: 30px; padding: 12px }
+  input { background: transparent; color: inherit; border: 0; width: 100%; min-width: 0; outline: none }
+  .tabs { display: flex; justify-content: space-around; position: sticky; top: 0; background: #000; border-bottom: 1px solid #333; height: 56px; align-items: center }
+  article { padding: 20px; border-bottom: 1px solid #333 }
+  article p { line-height: 1.5 }
+  .media { height: 280px; border-radius: 16px; background: linear-gradient(135deg,#594755,#8a7985); display: grid; place-items: center; font-size: 24px }
+  .actions { display: flex; justify-content: space-between; margin-top: 20px }
   __CENTERED_HOME_CSS__
-  </style></head><body class="Desktop HomeTimeline Sidebar"><div id="shell" data-at-shortcutkeys="true"><header role="banner"><div><div><nav aria-label="Primary"><a aria-label="Home">⌂<div dir="auto">Home</div></a><a aria-label="Notifications">♧<div dir="auto">Notifications</div></a><a aria-label="Messages">✉<div dir="auto">Messages</div></a></nav></div></div></header><main role="main"><div><div><div id="columns"><div id="primary" data-testid="primaryColumn"><div class="tabs"><button>For you</button><button>Following</button><button>Retweets</button></div><article><strong>Example @example · 1h</strong><p>The timeline stays centered, with a compact search field above it.</p><div class="media">Video preview</div><div class="actions"><button>Reply</button><button>Repost</button><button>Like</button><button>Share</button></div></article><article><strong>Another post</strong><p>Responsive layout test</p><div class="media">Image preview</div></article></div><div id="sidebar" data-testid="sidebarColumn"><div><div><div><div><div class="SidebarContents"><div><form role="search"><div class="search">⌕ <input aria-label="Search query" placeholder="Search"></div></form></div><div>Trending content</div></div></div></div></div></div></div></div></div></div></main></div><script>window.layoutMetrics=()=>{let p=document.querySelector('#primary').getBoundingClientRect(),s=document.querySelector('form').getBoundingClientRect();return {viewport:innerWidth,feed:{x:p.x,width:p.width,center:p.x+p.width/2},search:{x:s.x,width:s.width,center:s.x+s.width/2,bottom:s.bottom},feedTop:p.y,overflow:document.documentElement.scrollWidth>innerWidth,centerError:Math.abs(p.x+p.width/2-innerWidth/2),searchAbove:s.bottom<=p.y}};</script></body></html>
+</style></head>
+<body class="Desktop HomeTimeline Sidebar">
+  <div id="shell" data-at-shortcutkeys="true">
+    <header role="banner"><div><div><div>
+      <nav aria-label="Primary">
+        <a aria-label="Home">⌂<div dir="auto">Home</div></a>
+        <a aria-label="Notifications">♧<div dir="auto">Notifications</div></a>
+        <a aria-label="Messages">✉<div dir="auto">Messages</div></a>
+      </nav>
+      <a id="compose" data-testid="SideNav_NewTweet_Button" href="/compose/post" aria-label="Post"><div><svg viewBox="0 0 24 24"><path fill="currentColor" d="M11 2h2v9h9v2h-9v9h-2v-9H2v-2h9z"/></svg><span>Tweet</span></div></a>
+      <button id="account" data-testid="SideNav_AccountSwitcher_Button" aria-label="Account menu"><div class="avatar"></div><div dir="auto">Example<br>@example</div><div>…</div></button>
+    </div></div></div></header>
+    <main role="main"><div><div><div id="columns">
+      <div id="primary" data-testid="primaryColumn">
+        <div class="tabs"><button>For you</button><button>Following</button><button>Retweets</button></div>
+        <article><strong>Example @example · 1h</strong><p>The timeline stays centered, with a compact search field above it.</p><div class="media">Video preview</div><div class="actions"><button>Reply</button><button>Repost</button><button>Like</button><button>Share</button></div></article>
+        <article><strong>Another post</strong><p>Responsive layout test</p><div class="media">Image preview</div></article>
+      </div>
+      <!-- A sticky sidebar can retain inline height after its contents are hidden. -->
+      <div id="sidebar" data-testid="sidebarColumn"><div style="min-height: 148px"><div style="height: 148px"><div><div><div class="SidebarContents">
+        <div><form role="search"><div class="search">⌕ <input aria-label="Search query" placeholder="Search"></div></form></div>
+        <div>Trending content</div>
+      </div></div></div></div></div></div>
+    </div></div></div></main>
+  </div>
+  <script>
+    window.layoutMetrics = () => {
+      const rect = selector => document.querySelector(selector).getBoundingClientRect()
+      const p = rect('#primary'), s = rect('form'), h = rect('header'), c = rect('#compose'), a = rect('#account')
+      return {viewport: innerWidth, feed: {x:p.x,width:p.width,center:p.x+p.width/2}, search: {x:s.x,width:s.width,center:s.x+s.width/2,bottom:s.bottom}, feedTop:p.y, searchGap:p.y-s.bottom, overflow:document.documentElement.scrollWidth>innerWidth, centerError:Math.abs(p.x+p.width/2-innerWidth/2), searchAbove:s.bottom<=p.y, navFits:c.right<=h.right&&a.right<=h.right, composeWidth:c.width, accountWidth:a.width}
+    }
+  </script>
+</body></html>

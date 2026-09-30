@@ -9,7 +9,9 @@ async function main() {
   const source = fs.readFileSync(path.join(root, 'script.js'), 'utf8')
   const start = source.indexOf('function getCenteredHomeTimelineCss()')
   assert.ok(start >= 0, 'Centered Home layout must exist')
-  const css = vm.runInNewContext(source.slice(start, source.indexOf('\n//#region CSS', start)) + ';getCenteredHomeTimelineCss()')
+  const svgStart = source.indexOf('const Svgs =')
+  const svgSource = source.slice(svgStart, source.indexOf('\n}', svgStart) + 2)
+  const css = vm.runInNewContext(svgSource + '\n' + source.slice(start, source.indexOf('\n//#region CSS', start)) + ';getCenteredHomeTimelineCss()', {config: {replaceLogo: true}})
   const fixture = fs.readFileSync(path.join(__dirname, 'fixtures', 'home-layout.html'), 'utf8')
   const browser = await chromium.launch()
   try {
@@ -21,6 +23,17 @@ async function main() {
       assert.ok(metrics.centerError < 1, `Feed must be centered at ${width}px: ${JSON.stringify(metrics)}`)
       assert.ok(Math.abs(metrics.search.center - metrics.feed.center) < 1, 'Search must align with the feed')
       assert.ok(metrics.searchAbove, 'Search must be above the feed')
+      assert.ok(metrics.searchGap >= 0 && metrics.searchGap <= 12, `No empty sidebar space above the feed: ${JSON.stringify(metrics)}`)
+      assert.ok(metrics.navFits, `Compose and account buttons must fit beside the feed: ${JSON.stringify(metrics)}`)
+      assert.equal(metrics.composeWidth, 49, 'Compose button must stay compact at the wide-screen breakpoint')
+      assert.equal(metrics.accountWidth, 49, 'Account switcher must stay compact at the wide-screen breakpoint')
+      const composeIcon = await page.locator('#compose').evaluate(element => {
+        const icon = getComputedStyle(element, '::before')
+        return {content: icon.content, width: icon.width, mask: icon.maskImage}
+      })
+      assert.equal(composeIcon.content, '""', 'Compose icon must be rendered even when X supplies only text')
+      assert.equal(composeIcon.width, '24px')
+      assert.ok(composeIcon.mask.startsWith('url("data:image/svg+xml,'), 'Compose icon must have an SVG mask')
       assert.ok(metrics.search.width <= 350, 'Search must remain compact')
       assert.equal(metrics.overflow, false, `No horizontal overflow at ${width}px`)
       await page.getByRole('textbox', {name: 'Search query'}).fill('test query')
@@ -28,7 +41,7 @@ async function main() {
       await page.evaluate(() => window.scrollTo(0, 250))
       const tabs = await page.locator('.tabs').boundingBox()
       assert.ok(Math.abs(tabs.y) < 1, 'Timeline tabs must remain sticky')
-      console.log(`PASS: ${width}px, centered feed, compact search, no overflow, usable search and sticky tabs`)
+      console.log(`PASS: ${width}px, centered feed, ${metrics.searchGap}px search gap, compact navigation, usable search and sticky tabs`)
     }
     // CSS must leave mobile and non-Home layouts alone.
     for (const classes of ['Mobile HomeTimeline Sidebar', 'Desktop Profile Sidebar', 'Desktop Search Sidebar']) {

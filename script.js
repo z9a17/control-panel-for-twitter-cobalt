@@ -4164,6 +4164,7 @@ function interceptMediaButton() {
 //#endregion
 
 function getCenteredHomeTimelineCss() {
+  let composeIcon = encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="${config.replaceLogo ? Svgs.TWITTER_FEATHER_PLUS_PATH : Svgs.PLUS_PATH}"/></svg>`)
   return `
     body.Desktop.HomeTimeline {
       --cpft-home-nav-width: 88px;
@@ -4173,6 +4174,7 @@ function getCenteredHomeTimelineCss() {
       display: grid !important;
       grid-template-columns: var(--cpft-home-nav-width) minmax(0, var(--cpft-home-feed-width)) var(--cpft-home-nav-width);
       justify-content: center !important;
+      align-items: start !important;
       width: 100%;
     }
     body.Desktop.HomeTimeline header[role="banner"] {
@@ -4186,6 +4188,48 @@ function getCenteredHomeTimelineCss() {
       max-width: var(--cpft-home-nav-width) !important;
     }
     body.Desktop.HomeTimeline header[role="banner"] nav :is(a, button) div[dir] {
+      display: none !important;
+    }
+    body.Desktop.HomeTimeline header[role="banner"] > div > div > div {
+      width: 100% !important;
+      min-width: 0 !important;
+      max-width: 100% !important;
+    }
+    /* X renders a text-only compose button at its wider breakpoint. */
+    body.Desktop.HomeTimeline [data-testid="SideNav_NewTweet_Button"] {
+      width: 49px !important;
+      min-width: 49px !important;
+      max-width: 49px !important;
+      height: 49px !important;
+      padding: 0 !important;
+      border-radius: 50% !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+    body.Desktop.HomeTimeline [data-testid="SideNav_NewTweet_Button"] > div {
+      display: none !important;
+    }
+    body.Desktop.HomeTimeline [data-testid="SideNav_NewTweet_Button"]::before {
+      content: "";
+      width: 24px;
+      height: 24px;
+      background-color: currentColor;
+      mask: url("data:image/svg+xml,${composeIcon}") center / contain no-repeat;
+    }
+    body.Desktop.HomeTimeline [data-testid="SideNav_AccountSwitcher_Button"] {
+      width: 49px !important;
+      min-width: 49px !important;
+      max-width: 49px !important;
+      padding: 4px !important;
+      justify-content: center !important;
+    }
+    body.Desktop.HomeTimeline [data-testid="SideNav_AccountSwitcher_Button"] > div:first-child {
+      min-width: 0 !important;
+      max-width: 40px !important;
+      flex: none !important;
+    }
+    body.Desktop.HomeTimeline [data-testid="SideNav_AccountSwitcher_Button"] > div:not(:first-child),
+    body.Desktop.HomeTimeline [data-testid="SideNav_AccountSwitcher_Button"] div[dir] {
       display: none !important;
     }
     body.Desktop.HomeTimeline main {
@@ -4220,15 +4264,25 @@ function getCenteredHomeTimelineCss() {
       order: -1;
       width: min(350px, 100%) !important;
       min-width: 0 !important;
+      height: auto !important;
+      min-height: 0 !important;
+      flex: none !important;
       margin: 0 auto 8px !important;
       padding: 6px 8px 0 !important;
       position: static !important;
     }
-    body.Desktop.HomeTimeline [data-testid="sidebarColumn"] > div,
-    body.Desktop.HomeTimeline [data-testid="sidebarColumn"] > div > div,
+    /* Remove the height reservation and sticky positioning of the hidden sidebar. */
+    body.Desktop.HomeTimeline [data-testid="sidebarColumn"] div:has(.SidebarContents),
+    body.Desktop.HomeTimeline [data-testid="sidebarColumn"] .SidebarContents,
     body.Desktop.HomeTimeline .SidebarContents > div:first-child {
       width: 100% !important;
       min-width: 0 !important;
+      height: auto !important;
+      min-height: 0 !important;
+      max-height: none !important;
+      margin-block: 0 !important;
+      padding-block: 0 !important;
+      flex: none !important;
       position: static !important;
     }
     @media (max-width: 760px) {
