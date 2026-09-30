@@ -4169,6 +4169,7 @@ function getCenteredHomeTimelineCss() {
     body.Desktop.HomeTimeline {
       --cpft-home-nav-width: 88px;
       --cpft-home-feed-width: min(600px, calc(100vw - var(--cpft-home-nav-width) - var(--cpft-home-nav-width)));
+      --cpft-home-search-width: min(350px, calc((100vw - var(--cpft-home-feed-width)) / 2 - 24px));
     }
     body.Desktop.HomeTimeline div[data-at-shortcutkeys]:has(> header[role="banner"]):has(> main) {
       display: grid !important;
@@ -4247,29 +4248,31 @@ function getCenteredHomeTimelineCss() {
       max-width: 600px !important;
     }
     body.Desktop.HomeTimeline main div:has(> [data-testid="primaryColumn"]) {
-      display: flex !important;
-      flex-direction: column !important;
+      display: block !important;
+      position: relative !important;
       width: 100% !important;
       min-width: 0 !important;
-      align-items: center !important;
     }
     body.Desktop.HomeTimeline [data-testid="primaryColumn"] {
       width: 100% !important;
       min-width: 0 !important;
       max-width: 600px !important;
       box-sizing: border-box;
-      order: 0;
     }
     body.Desktop.HomeTimeline [data-testid="sidebarColumn"] {
-      order: -1;
-      width: min(350px, 100%) !important;
+      /* Search occupies the right margin without affecting the feed's layout. */
+      display: block !important;
+      position: absolute !important;
+      left: calc(100% + 16px) !important;
+      top: 0 !important;
+      bottom: 0 !important;
+      width: var(--cpft-home-search-width) !important;
       min-width: 0 !important;
       height: auto !important;
       min-height: 0 !important;
       flex: none !important;
-      margin: 0 auto 8px !important;
-      padding: 6px 8px 0 !important;
-      position: static !important;
+      margin: 0 !important;
+      padding: 6px 0 0 !important;
     }
     /* Remove the height reservation and sticky positioning of the hidden sidebar. */
     body.Desktop.HomeTimeline [data-testid="sidebarColumn"] div:has(.SidebarContents),
@@ -4283,7 +4286,16 @@ function getCenteredHomeTimelineCss() {
       margin-block: 0 !important;
       padding-block: 0 !important;
       flex: none !important;
-      position: static !important;
+      position: relative !important;
+      top: auto !important;
+      bottom: auto !important;
+    }
+    body.Desktop.HomeTimeline [data-testid="sidebarColumn"] > div:has(.SidebarContents) {
+      position: sticky !important;
+      top: 0 !important;
+    }
+    @media (max-width: 999px) {
+      body.Desktop.HomeTimeline [data-testid="sidebarColumn"] { display: none !important; }
     }
     @media (max-width: 760px) {
       body.Desktop.HomeTimeline { --cpft-home-nav-width: 64px; }

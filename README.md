@@ -29,7 +29,8 @@ Options for all of this are under **Media downloads** on the extension's options
 page. See [cobalt/README.md](cobalt/README.md) for how it's put together.
 
 **Center the Home timeline** keeps the feed centered at different display scales
-and puts a compact search field above it when sidebar content is hidden. It is
+and keeps search on the right when sidebar content is hidden. Search fits the
+available right margin and hides in narrow windows without shifting the posts. It is
 enabled by default. Full-width timeline mode takes priority; other pages keep
 their normal layouts.
 

@@ -51,7 +51,7 @@
     <main role="main"><div><div><div id="columns">
       <div id="primary" data-testid="primaryColumn">
         <div class="tabs"><button>For you</button><button>Following</button><button>Retweets</button></div>
-        <article><strong>Example @example · 1h</strong><p>The timeline stays centered, with a compact search field above it.</p><div class="media">Video preview</div><div class="actions"><button>Reply</button><button>Repost</button><button>Like</button><button>Share</button></div></article>
+        <article><strong>Example @example · 1h</strong><p>The posts stay centered, with search in the right sidebar.</p><div class="media">Video preview</div><div class="actions"><button>Reply</button><button>Repost</button><button>Like</button><button>Share</button></div></article>
         <article><strong>Another post</strong><p>Responsive layout test</p><div class="media">Image preview</div></article>
       </div>
       <!-- A sticky sidebar can retain inline height after its contents are hidden. -->
@@ -65,7 +65,7 @@
     window.layoutMetrics = () => {
       const rect = selector => document.querySelector(selector).getBoundingClientRect()
       const p = rect('#primary'), s = rect('form'), h = rect('header'), c = rect('#compose'), a = rect('#account')
-      return {viewport: innerWidth, feed: {x:p.x,width:p.width,center:p.x+p.width/2}, search: {x:s.x,width:s.width,center:s.x+s.width/2,bottom:s.bottom}, feedTop:p.y, searchGap:p.y-s.bottom, overflow:document.documentElement.scrollWidth>innerWidth, centerError:Math.abs(p.x+p.width/2-innerWidth/2), searchAbove:s.bottom<=p.y, navFits:c.right<=h.right&&a.right<=h.right, composeWidth:c.width, accountWidth:a.width}
+      return {viewport: innerWidth, feed: {x:p.x,width:p.width,center:p.x+p.width/2}, search: {x:s.x,width:s.width,center:s.x+s.width/2,bottom:s.bottom}, feedTop:p.y, overflow:document.documentElement.scrollWidth>innerWidth, centerError:Math.abs(p.x+p.width/2-innerWidth/2), navFits:c.right<=h.right&&a.right<=h.right, composeWidth:c.width, accountWidth:a.width}
     }
   </script>
 </body></html>
