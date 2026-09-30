@@ -118,6 +118,16 @@
       </section>
       <section class="checkbox desktop">
         <label>
+          <span id="centerHomeTimelineLabel">Center the Home timeline</span>
+          <input type="checkbox" name="centerHomeTimeline">
+          <span class="toggle"></span>
+        </label>
+        <p id="centerHomeTimelineInfo">
+          Keep Home centered with compact search above it when sidebar content is hidden. Full-width mode takes priority.
+        </p>
+      </section>
+      <section class="checkbox desktop">
+        <label>
           <span id="fullWidthContentLabel">Full-width timeline content</span>
           <input type="checkbox" name="fullWidthContent">
           <span class="toggle"></span>
@@ -999,7 +1009,7 @@
       </section>
     </section>
 
-    <div id="version">v4.25.3<span id="debugCountdown"></span></div>
+    <div id="version">v4.25.4<span id="debugCountdown"></span></div>
   </form>
   <script src="options.js"></script>
 </body>

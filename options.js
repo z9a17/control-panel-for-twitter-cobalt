@@ -73,6 +73,8 @@ for (let translationId of [
   'followButtonStyleOption_monochrome',
   'followButtonStyleOption_themed',
   'fullWidthContentInfo',
+  'centerHomeTimelineLabel',
+  'centerHomeTimelineInfo',
   'fullWidthContentLabel',
   'fullWidthMediaLabel',
   'hideAccountSwitcherLabel',
@@ -322,6 +324,7 @@ const defaultConfig = {
   // Desktop only
   addUserHoverCardAccountLocation: true,
   fullWidthContent: false,
+  centerHomeTimeline: true,
   fullWidthMedia: true,
   hideAccountSwitcher: false,
   hideExploreNav: true,
@@ -375,7 +378,7 @@ let $showBlueReplyFollowersCountLabel = /** @type {HTMLElement} */ (document.que
 //#region Utility functions
 function exportConfig() {
   let $a = document.createElement('a')
-  $a.download = 'control-panel-for-twitter-v4.25.3.config.txt'
+  $a.download = 'control-panel-for-twitter-v4.25.4.config.txt'
   $a.href = URL.createObjectURL(new Blob([
     JSON.stringify(optionsConfig, null, 2)
   ], {type: 'text/plain'}))

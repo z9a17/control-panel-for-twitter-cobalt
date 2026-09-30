@@ -23,6 +23,7 @@
     "preandroid": "npm run create-browser-action && npm run copy-mv2",
     "android": "web-ext run -t firefox-android --firefox-apk org.mozilla.fenix",
     "test": "node scripts/verify-regressions.cjs",
+    "test:layout": "node scripts/verify-layout.cjs",
     "build-helium": "node scripts/build-helium.cjs"
   },
   "webExt": {
@@ -54,6 +55,7 @@
     "@types/greasemonkey": "4.x",
     "clipboardy": "3.x",
     "jsdom": "^30.1.1",
+    "playwright": "^1.63.0",
     "semver": "7.x",
     "web-ext": "7.x"
   }

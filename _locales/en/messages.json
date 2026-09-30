@@ -143,6 +143,12 @@
   "fullWidthContentInfo": {
     "message": "Hide the sidebar and let timeline content go full-width"
   },
+  "centerHomeTimelineInfo": {
+    "message": "Keep Home centered with compact search above it when sidebar content is hidden. Full-width mode takes priority."
+  },
+  "centerHomeTimelineLabel": {
+    "message": "Center the Home timeline"
+  },
   "fullWidthContentLabel": {
     "message": "Full-width timeline content"
   },

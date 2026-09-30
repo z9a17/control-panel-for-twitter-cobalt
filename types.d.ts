@@ -110,6 +110,7 @@ export type Config = {
   // Desktop only
   addUserHoverCardAccountLocation: boolean
   fullWidthContent: boolean
+  centerHomeTimeline: boolean
   fullWidthMedia: boolean
   hideAccountSwitcher: boolean
   hideExploreNav: boolean

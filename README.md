@@ -28,7 +28,20 @@ downloading. Everything else works exactly like the upstream extension.
 Options for all of this are under **Media downloads** on the extension's options
 page. See [cobalt/README.md](cobalt/README.md) for how it's put together.
 
+**Center the Home timeline** keeps the feed centered at different display scales
+and puts a compact search field above it when sidebar content is hidden. It is
+enabled by default. Full-width timeline mode takes priority; other pages keep
+their normal layouts.
+
 ### Installing it
+
+Download the **MV3 ZIP** from the [latest release](https://github.com/z9a17/control-panel-for-twitter-cobalt/releases/latest)
+for Helium, Chrome, Edge and other Chromium browsers. Extract it to a permanent
+folder, open `chrome://extensions`, enable **Developer mode**, then choose
+**Load unpacked** and select that folder. To update, replace the extracted files,
+reload the extension on the extensions page, and refresh Twitter.
+
+The MV2 ZIP is also provided for browsers which still support Manifest V2.
 
 Download the repository, then load it as an unpacked extension in a
 Chromium-based browser:

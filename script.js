@@ -214,6 +214,7 @@ const config = {
   // Desktop only
   addUserHoverCardAccountLocation: true,
   fullWidthContent: false,
+  centerHomeTimeline: true,
   fullWidthMedia: true,
   hideAccountSwitcher: false,
   hideExploreNav: true,
@@ -4162,6 +4163,80 @@ function interceptMediaButton() {
 }
 //#endregion
 
+function getCenteredHomeTimelineCss() {
+  return `
+    body.Desktop.HomeTimeline {
+      --cpft-home-nav-width: 88px;
+      --cpft-home-feed-width: min(600px, calc(100vw - var(--cpft-home-nav-width) - var(--cpft-home-nav-width)));
+    }
+    body.Desktop.HomeTimeline div[data-at-shortcutkeys]:has(> header[role="banner"]):has(> main) {
+      display: grid !important;
+      grid-template-columns: var(--cpft-home-nav-width) minmax(0, var(--cpft-home-feed-width)) var(--cpft-home-nav-width);
+      justify-content: center !important;
+      width: 100%;
+    }
+    body.Desktop.HomeTimeline header[role="banner"] {
+      grid-column: 1;
+      width: var(--cpft-home-nav-width) !important;
+      min-width: 0 !important;
+    }
+    body.Desktop.HomeTimeline header[role="banner"] > div,
+    body.Desktop.HomeTimeline header[role="banner"] > div > div {
+      width: var(--cpft-home-nav-width) !important;
+      max-width: var(--cpft-home-nav-width) !important;
+    }
+    body.Desktop.HomeTimeline header[role="banner"] nav :is(a, button) div[dir] {
+      display: none !important;
+    }
+    body.Desktop.HomeTimeline main {
+      grid-column: 2;
+      width: 100% !important;
+      min-width: 0 !important;
+      max-width: 600px !important;
+      flex: none !important;
+      align-items: stretch !important;
+    }
+    body.Desktop.HomeTimeline main > div,
+    body.Desktop.HomeTimeline main > div > div {
+      width: 100% !important;
+      min-width: 0 !important;
+      max-width: 600px !important;
+    }
+    body.Desktop.HomeTimeline main div:has(> [data-testid="primaryColumn"]) {
+      display: flex !important;
+      flex-direction: column !important;
+      width: 100% !important;
+      min-width: 0 !important;
+      align-items: center !important;
+    }
+    body.Desktop.HomeTimeline [data-testid="primaryColumn"] {
+      width: 100% !important;
+      min-width: 0 !important;
+      max-width: 600px !important;
+      box-sizing: border-box;
+      order: 0;
+    }
+    body.Desktop.HomeTimeline [data-testid="sidebarColumn"] {
+      order: -1;
+      width: min(350px, 100%) !important;
+      min-width: 0 !important;
+      margin: 0 auto 8px !important;
+      padding: 6px 8px 0 !important;
+      position: static !important;
+    }
+    body.Desktop.HomeTimeline [data-testid="sidebarColumn"] > div,
+    body.Desktop.HomeTimeline [data-testid="sidebarColumn"] > div > div,
+    body.Desktop.HomeTimeline .SidebarContents > div:first-child {
+      width: 100% !important;
+      min-width: 0 !important;
+      position: static !important;
+    }
+    @media (max-width: 760px) {
+      body.Desktop.HomeTimeline { --cpft-home-nav-width: 64px; }
+    }
+  `
+}
+
 //#region CSS
 const configureCss = (() => {
   let $style
@@ -4768,6 +4843,9 @@ const configureCss = (() => {
 
     //#region Desktop-only
     if (desktop) {
+      if (config.centerHomeTimeline && config.hideSidebarContent && !config.fullWidthContent) {
+        cssRules.push(getCenteredHomeTimelineCss())
+      }
       if (hasNewLayout() && config.tweakNewLayout) {
         cssRules.push(`
           /* Realign nav items to the top */
